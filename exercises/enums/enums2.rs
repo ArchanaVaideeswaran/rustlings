@@ -1,11 +1,22 @@
 // enums2.rs
 // Execute `rustlings hint enums2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
+struct Quit;
+struct Echo;
+struct Move;
+struct ChangeColor;
 
 #[derive(Debug)]
 enum Message {
     // TODO: define the different variants used below
+    Quit,
+    Echo(String),
+    Move{
+        x: u32,
+        y: u32
+    },
+    ChangeColor(i32, i32, i32)
 }
 
 impl Message {

@@ -7,6 +7,9 @@
 
 use std::convert::{TryFrom, TryInto};
 
+const U8_MIN: i16 = std::u8::MIN as i16;
+const U8_MAX: i16 = std::u8::MAX as i16;
+
 #[derive(Debug, PartialEq)]
 struct Color {
     red: u8,
@@ -23,7 +26,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -38,6 +40,15 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (r, g, b) = tuple;
+        if r < U8_MIN || r > U8_MAX || g < U8_MIN || g > U8_MAX || b < U8_MIN || b > U8_MAX {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Color {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        })
     }
 }
 
@@ -45,6 +56,15 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let [r, g, b] = arr;
+        if r < U8_MIN || r > U8_MAX || g < U8_MIN || g > U8_MAX || b < U8_MIN || b > U8_MAX {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Color {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        })
     }
 }
 
@@ -52,6 +72,20 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+        let r = slice[0];
+        let g = slice[1];
+        let b = slice[2];
+        if r < U8_MIN || r > U8_MAX || g < U8_MIN || g > U8_MAX || b < U8_MIN || b > U8_MAX {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Color {
+            red: r as u8,
+            green: g as u8,
+            blue: b as u8,
+        })
     }
 }
 
